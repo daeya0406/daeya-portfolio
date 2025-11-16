@@ -53,6 +53,14 @@
 
 ---
 
+## 🎛️ UI Component System
+
+- `@radix-ui/react-select` — Select 컴포넌트 로직
+- `@radix-ui/react-dialog` — Modal
+- `@radix-ui/react-dropdown-menu` — 옵션 메뉴
+
+---
+
 ## 🎨 디자인 컨셉
 
 - **Primary Color:** #38BDF8 (하늘색)
