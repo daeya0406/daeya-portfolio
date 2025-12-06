@@ -1,6 +1,6 @@
 'use client';
 
-import { Heading } from '@/components/common/Heading';
+import { useState } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Textarea } from '@/components/ui/Textarea';
@@ -37,13 +37,29 @@ import {
 } from '@/components/ui/Dialog';
 
 import {
-  DropdownMenu,
-  DropdownMenuTrigger,
-  DropdownMenuContent,
-  DropdownMenuItem,
-} from '@/components/ui/DropdownMenu';
+  DropdownOption,
+  DropdownOptionTrigger,
+  DropdownOptionContent,
+  DropdownOptionItem,
+} from '@/components/ui/DropdownOption';
+import { ContactFormDemo } from '@/components/guide/ContactFormDemo';
+import { Typo } from '@/components/ui/Text';
+import { DateText } from '@/components/ui/DateText';
+import { DatePicker } from '@/components/ui/DatePicker';
+import {
+  Table,
+  TableBody,
+  
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableEmpty,
+} from '@/components/ui/Table';
+import { Badge } from '@/components/ui/Badge';
 
 export default function UISection() {
+  const [pickedDate, setPickedDate] = useState<Date | undefined>();
   const icons = {
     Sun,
     Moon,
@@ -59,12 +75,15 @@ export default function UISection() {
 
   return (
     <>
-      <Heading>UI Components</Heading>
+      <div className="line-bottom mb-8 space-y-2">
+        <Typo.h3 className="text-primary">UI Components</Typo.h3>
+        <Typo.caption className="block">프로젝트에서 UI 컴포넌트입니다.</Typo.caption>
+      </div>
 
       <div className="flex flex-col gap-10">
         {/* Button */}
         <div className="flex flex-col gap-3">
-          <p className="text-muted-foreground text-sm">Button Variants</p>
+          <Typo.body>Button Variants</Typo.body>
           <div className="flex flex-wrap gap-3">
             <Button>Default</Button>
             <Button variant="secondary">보조 버튼</Button>
@@ -76,19 +95,22 @@ export default function UISection() {
 
         {/* Input */}
         <div className="flex flex-col gap-3">
-          <p className="text-muted-foreground text-sm">Input</p>
+          <Typo.body>Input</Typo.body>
           <Input placeholder="이메일을 입력하세요" className="max-w-sm" />
         </div>
 
         {/* Textarea */}
         <div className="flex flex-col gap-3">
-          <p className="text-muted-foreground text-sm">Textarea</p>
+          <Typo.body>Textarea</Typo.body>
           <Textarea placeholder="메시지를 입력하세요..." className="max-w-sm" />
         </div>
 
         {/* Select */}
         <div className="flex flex-col gap-3">
-          <p className="text-muted-foreground text-sm">Select (Radix)</p>
+          <div className="flex items-center gap-2">
+            <Typo.body>Select</Typo.body>
+            <Badge variant="outline">Radix</Badge>
+          </div>
           <Select>
             <SelectTrigger className="w-[200px]">
               <SelectValue placeholder="선택" />
@@ -101,10 +123,24 @@ export default function UISection() {
           </Select>
         </div>
 
+        {/* DatePicker */}
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center gap-2">
+            <Typo.body>Date Picker</Typo.body>
+            <Badge variant="outline">dayjs</Badge>
+          </div>
+          <div className="flex flex-wrap items-start gap-3">
+            <DatePicker value={pickedDate} onChange={setPickedDate} />
+            <DateText value={pickedDate ?? new Date()} label="선택 날짜" />
+          </div>
+        </div>
+
         {/* Dialog */}
         <div className="flex flex-col gap-3">
-          <p className="text-muted-foreground text-sm">Dialog (Modal)</p>
-
+          <div className="flex items-center gap-2">
+            <Typo.body>Dialog</Typo.body>
+            <Badge variant="outline">Modal</Badge>
+          </div>
           <Dialog>
             <DialogTrigger asChild>
               <Button className="w-[160px]">모달 열기</Button>
@@ -121,27 +157,28 @@ export default function UISection() {
 
         {/* Dropdown Menu */}
         <div className="flex flex-col gap-3">
-          <p className="text-muted-foreground text-sm">Dropdown Menu</p>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+          <Typo.body>Dropdown Menu</Typo.body>
+          <DropdownOption>
+            <DropdownOptionTrigger asChild>
               <Button variant="outline" className="w-[40px] px-0">
                 <EllipsisVertical className="text-slate-500" />
               </Button>
-            </DropdownMenuTrigger>
+            </DropdownOptionTrigger>
 
-            <DropdownMenuContent align="start" sideOffset={4}>
-              <DropdownMenuItem>프로필 보기</DropdownMenuItem>
-              <DropdownMenuItem>수정하기</DropdownMenuItem>
-              <DropdownMenuItem>삭제하기</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+            <DropdownOptionContent align="start" sideOffset={4}>
+              <DropdownOptionItem>프로필 보기</DropdownOptionItem>
+              <DropdownOptionItem>수정하기</DropdownOptionItem>
+              <DropdownOptionItem>삭제하기</DropdownOptionItem>
+            </DropdownOptionContent>
+          </DropdownOption>
         </div>
 
         {/* Icon */}
         <div className="flex flex-col gap-3">
-          <p className="text-muted-foreground text-sm">Icons (Lucide)</p>
-
+          <div className="flex items-center gap-2">
+            <Typo.body>Icons</Typo.body>
+            <Badge variant="outline">Lucide</Badge>
+          </div>
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="outline" className="w-[180px]">
@@ -164,7 +201,7 @@ export default function UISection() {
                       navigator.clipboard.writeText(code);
                       toast.success(`Copied: ${name}`);
                     }}
-                    className="hover:bg-muted/40 flex cursor-pointer flex-col items-center justify-center gap-2 rounded-md p-3 transition"
+                    className="hover:bg-muted/40 flex flex-col items-center justify-center gap-2 rounded-md p-3 transition"
                   >
                     <Icon className="h-6 w-6" />
                     <span className="text-muted-foreground text-xs">{name}</span>
@@ -173,6 +210,59 @@ export default function UISection() {
               </div>
             </DialogContent>
           </Dialog>
+        </div>
+
+        {/* Table */}
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center gap-2">
+            <Typo.body>Table</Typo.body>
+            <Badge variant="outline">컴파운드 패턴</Badge>
+          </div>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>이름</TableHead>
+                <TableHead>역할</TableHead>
+                <TableHead>상태</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              <TableRow>
+                <TableCell>알파</TableCell>
+                <TableCell>프론트엔드</TableCell>
+                <TableCell>
+                  <Badge>In progress</Badge>
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>베타</TableCell>
+                <TableCell>백엔드</TableCell>
+                <TableCell>
+                  <Badge className="bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-200">
+                    Done
+                  </Badge>
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </div>
+
+        {/* 테이블 데이터 없을 때 */}
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center gap-2">
+            <Typo.body>Table</Typo.body>
+            <Badge variant="outline">데이터 없을 때</Badge>
+          </div>
+          <TableEmpty>데이터가 없습니다.</TableEmpty>
+        </div>
+
+        {/* Form + Validation + Query */}
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center gap-2">
+            <Typo.body>Form</Typo.body>
+            <Badge variant="outline">React Hook Form + Zod + React Query</Badge>
+          </div>
+          <ContactFormDemo />
         </div>
       </div>
     </>

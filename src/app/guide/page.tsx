@@ -1,40 +1,61 @@
 'use client';
 
-import { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { Suspense, useMemo } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { Tabs } from '@/components/ui/Tabs';
+import { extractTabsFromNav } from '@/components/common/navigation';
 
-import UISection from './sections/UISection';
-import FontSection from './sections/FontSection';
-import ColorSection from './sections/ColorSection';
+import { GuideTabContent } from './GuideTabContent';
 
-const tabs = [
-  { key: 'ui', label: 'UI' },
-  { key: 'font', label: 'Font' },
-  { key: 'color', label: 'Color' },
-] as const;
+const tabs = extractTabsFromNav('Guide');
+type TabKey = string;
 
 export default function Guide() {
-  const [activeTab, setActiveTab] = useState<'ui' | 'font' | 'color'>('ui');
+  return (
+    <Suspense fallback={<div className="py-10 text-center text-sm text-slate-500">Loading...</div>}>
+      <GuidePageContent />
+    </Suspense>
+  );
+}
+
+function GuidePageContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const defaultKey = tabs[0]?.key ?? '';
+
+  const activeTab = useMemo<TabKey>(() => {
+    const tab = searchParams.get('tab');
+    return (tabs.find((t) => t.key === tab)?.key ?? defaultKey) as TabKey;
+  }, [searchParams, defaultKey]);
+
+  const onChange = (key: TabKey) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('tab', key);
+    router.replace(`/guide?${params.toString()}`, { scroll: false });
+  };
+
+  if (!tabs.length) {
+    return null;
+  }
 
   return (
     <section className="mx-auto max-w-5xl space-y-6 px-2 py-4">
-      <Tabs tabs={tabs} active={activeTab} onChange={setActiveTab} />
+      <Tabs.Root value={activeTab} defaultValue={defaultKey} onValueChange={onChange}>
+        <Tabs.List>
+          {tabs.map((tab) => (
+            <Tabs.Trigger key={tab.key} value={tab.key}>
+              {tab.label}
+            </Tabs.Trigger>
+          ))}
+        </Tabs.List>
 
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={activeTab}
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -15 }}
-          transition={{ duration: 0.25 }}
-          className="section-card"
-        >
-          {activeTab === 'ui' && <UISection />}
-          {activeTab === 'font' && <FontSection />}
-          {activeTab === 'color' && <ColorSection />}
-        </motion.div>
-      </AnimatePresence>
+        <Tabs.Content key={activeTab} value={activeTab}>
+          <div className="section-card">
+            <GuideTabContent tab={activeTab} />
+          </div>
+        </Tabs.Content>
+      </Tabs.Root>
     </section>
   );
 }

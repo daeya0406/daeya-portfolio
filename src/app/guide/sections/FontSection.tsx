@@ -1,62 +1,111 @@
 'use client';
-import { Copy } from 'lucide-react';
-import { toast } from 'sonner';
-import { Heading } from '@/components/common/Heading';
 
-const fontSizes = [
-  { label: 'xs', className: 'text-xs', px: '12px' },
-  { label: 'sm', className: 'text-sm', px: '14px' },
-  { label: 'base', className: 'text-base', px: '16px' },
-  { label: 'lg', className: 'text-lg', px: '18px' },
-  { label: 'xl', className: 'text-xl', px: '20px' },
-  { label: '2xl', className: 'text-2xl', px: '24px' },
-  { label: '3xl', className: 'text-3xl', px: '30px' },
-  { label: '4xl', className: 'text-4xl', px: '36px' },
-  { label: '5xl', className: 'text-5xl', px: '48px' },
-  { label: '6xl', className: 'text-6xl', px: '60px' },
+import { toast } from 'sonner';
+import { Typo } from '@/components/ui/Text';
+
+const TYPO_SCALES = [
+  {
+    label: '<Typo.h1>',
+    className: 'typo-h1',
+    sample: 'Page Title',
+    snippet: '<Typo.h1>Page Title</Typo.h1>',
+  },
+  {
+    label: '<Typo.h2>',
+    className: 'typo-h2',
+    sample: 'Section Title',
+    snippet: '<Typo.h2>Section Title</Typo.h2>',
+  },
+  {
+    label: '<Typo.h3>',
+    className: 'typo-h3',
+    sample: 'Subsection Title',
+    snippet: '<Typo.h3>Subsection Title</Typo.h3>',
+  },
+  {
+    label: '<Typo.h4>',
+    className: 'typo-h4',
+    sample: 'Section Subtitle',
+    snippet: '<Typo.h4>Section Subtitle</Typo.h4>',
+  },
+  {
+    label: '<Typo.h5>',
+    className: 'typo-h5',
+    sample: 'Label Heading',
+    snippet: '<Typo.h5>Label Heading</Typo.h5>',
+  },
+  {
+    label: '<Typo.h6>',
+    className: 'typo-h6',
+    sample: 'Mini Heading',
+    snippet: '<Typo.h6>Mini Heading</Typo.h6>',
+  },
+  {
+    label: '<Typo.bodyXl>',
+    className: 'typo-body-xl',
+    sample: 'Body XL',
+    snippet: '<Typo.bodyXl>Body XL</Typo.bodyXl>',
+  },
+  {
+    label: '<Typo.bodyLg>',
+    className: 'typo-body-lg',
+    sample: 'Body Large',
+    snippet: '<Typo.bodyLg>Body Large</Typo.bodyLg>',
+  },
+  {
+    label: '<Typo.bodyMd>',
+    className: 'typo-body-md',
+    sample: 'Body Medium',
+    snippet: '<Typo.bodyMd>Body Medium</Typo.bodyMd>',
+  },
+  {
+    label: '<Typo.bodySm>',
+    className: 'typo-body-sm',
+    sample: 'Body Small',
+    snippet: '<Typo.bodySm>Body Small</Typo.bodySm>',
+  },
+  {
+    label: '<Typo.bodyXs>',
+    className: 'typo-body-xs',
+    sample: 'Body XSmall',
+    snippet: '<Typo.bodyXs>Body XSmall</Typo.bodyXs>',
+  },
+  {
+    label: '<Typo.caption>',
+    className: 'typo-caption',
+    sample: 'Caption',
+    snippet: '<Typo.caption>Caption</Typo.caption>',
+  },
+  {
+    label: '<Typo.overline>',
+    className: 'typo-overline',
+    sample: 'OVERLINE',
+    snippet: '<Typo.overline>OVERLINE</Typo.overline>',
+  },
 ];
 
 export default function FontSection() {
-  const handleCopy = (text: string) => {
+  const copy = (text: string, toastText: string) => {
     navigator.clipboard.writeText(text);
-    toast.success(`Copied: ${text}`, { duration: 1500 });
+    toast.success(`Copied: ${toastText}`, { duration: 1500 });
   };
 
   return (
     <>
-      <Heading subtitle="폰트 크기 스케일 / 클릭 시 클래스 복사">Font System</Heading>
-
-      <div className="divide-border border-border divide-y border-t">
-        {fontSizes.map(({ label, className, px }) => (
-          <div key={label} className="hover:bg-muted/20 px-4 py-4 transition-colors">
-            <div className="mb-3 flex items-center justify-between">
-              <div className="text-muted-foreground text-sm">
-                text-{label} <span className="text-muted-foreground/60 ml-1">{px}</span>
-              </div>
-            </div>
-
-            <div className="flex flex-col gap-2">
-              {/* Bold */}
-              <div
-                onClick={() => handleCopy(`${className} font-bold`)}
-                className="hover:bg-muted/30 group flex cursor-pointer items-center justify-between rounded-md px-3 py-2 transition"
-              >
-                <p className={`${className} text-foreground font-bold`}>{className} font-bold</p>
-                <Copy className="text-muted-foreground h-4 w-4 opacity-0 transition group-hover:opacity-100" />
-              </div>
-
-              {/* Normal */}
-              <div
-                onClick={() => handleCopy(`${className} font-normal`)}
-                className="hover:bg-muted/30 group flex cursor-pointer items-center justify-between rounded-md px-3 py-2 transition"
-              >
-                <p className={`${className} text-foreground/90 font-normal`}>
-                  {className} font-normal
-                </p>
-                <Copy className="text-muted-foreground h-4 w-4 opacity-0 transition group-hover:opacity-100" />
-              </div>
-            </div>
-          </div>
+      <div className="line-bottom mb-8 space-y-2">
+        <Typo.h3 className="text-primary">Font System</Typo.h3>
+        <Typo.caption>폰트 크기 스케일 / 클릭 시 컴포넌트 태그 복사</Typo.caption>
+      </div>
+      <div className="grid gap-4 sm:grid-cols-2">
+        {TYPO_SCALES.map(({ label, className, sample, snippet }) => (
+          <button
+            key={label}
+            onClick={() => copy(snippet, label)}
+            className="group flex flex-col items-start rounded-md p-4 text-left transition hover:bg-slate-200 dark:hover:bg-slate-800"
+          >
+            <span className={`${className} mb-1`}>{sample}</span>
+            <span className="text-muted-foreground group-hover:text-primary text-xs">{label}</span>
+          </button>
         ))}
       </div>
     </>

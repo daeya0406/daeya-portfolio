@@ -1,5 +1,7 @@
 'use client';
-import { motion } from 'framer-motion';
+
+import { createContext, useContext, useMemo, useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 
 interface Tab<K extends string> {
   key: K;
@@ -7,28 +9,28 @@ interface Tab<K extends string> {
 }
 
 interface TabsProps<K extends string> {
-  tabs: readonly Tab<K>[]; // readonly 배열 지원
-  active: K; // literal union 그대로 사용
-  onChange: (key: K) => void; // string → literal union
+  tabs: readonly Tab<K>[];
+  active: K;
+  onChange: (key: K) => void;
 }
 
-export function Tabs<K extends string>({ tabs, active, onChange }: TabsProps<K>) {
+export function TabsNav<K extends string>({ tabs, active, onChange }: TabsProps<K>) {
   return (
-    <nav className="border-border text-foreground relative flex justify-center border-b">
-      <div className="flex gap-10">
+    <nav className="border-border text-foreground relative overflow-x-auto overflow-y-hidden border-b">
+      <div className="flex w-max gap-6 px-1">
         {tabs.map((tab) => (
           <button
             key={tab.key}
             onClick={() => onChange(tab.key)}
-            className={`text-md relative min-w-[80px] cursor-pointer pb-3 font-semibold ${
-              active === tab.key ? 'text-primary' : 'text-foreground/50 hover:text-foreground'
+            className={`text-md relative min-w-20 pb-3 font-semibold outline-none ${
+              active === tab.key ? 'text-primary' : 'text-foreground/60 hover:text-foreground'
             }`}
           >
             {tab.label}
             {active === tab.key && (
               <motion.div
                 layoutId="underline"
-                className="bg-primary absolute bottom-0 left-0 h-[2px] w-full"
+                className="bg-primary absolute bottom-0 left-0 h-0.5 w-full"
               />
             )}
           </button>
@@ -37,3 +39,110 @@ export function Tabs<K extends string>({ tabs, active, onChange }: TabsProps<K>)
     </nav>
   );
 }
+
+type TabsContextType = {
+  value: string;
+  setValue: (value: string) => void;
+};
+
+const TabsContext = createContext<TabsContextType | null>(null);
+
+function useTabsCtx() {
+  const ctx = useContext(TabsContext);
+  if (!ctx) throw new Error('Tabs components must be used within <TabsRoot>');
+  return ctx;
+}
+
+type TabsRootProps = {
+  value?: string;
+  defaultValue: string;
+  onValueChange?: (value: string) => void;
+  children: React.ReactNode;
+};
+
+function TabsRoot({ value, defaultValue, onValueChange, children }: TabsRootProps) {
+  const [internal, setInternal] = useState(defaultValue);
+  const current = value ?? internal;
+
+  const api = useMemo(
+    () => ({
+      value: current,
+      setValue: (val: string) => {
+        setInternal(val);
+        onValueChange?.(val);
+      },
+    }),
+    [current, onValueChange]
+  );
+
+  return <TabsContext.Provider value={api}>{children}</TabsContext.Provider>;
+}
+
+export function TabsList({ children }: { children: React.ReactNode }) {
+  return (
+    <nav className="border-border text-foreground relative overflow-y-hidden border-b">
+      <div className="flex w-max gap-6 px-1">{children}</div>
+    </nav>
+  );
+}
+
+type TabsTriggerProps = {
+  value: string;
+  children: React.ReactNode;
+};
+
+function TabsTrigger({ value, children }: TabsTriggerProps) {
+  const { value: active, setValue } = useTabsCtx();
+
+  const isActive = active === value;
+  return (
+    <button
+      onClick={() => setValue(value)}
+      className={`text-md relative min-w-20 pb-3 font-semibold outline-none ${
+        isActive ? 'text-primary' : 'text-foreground/60 hover:text-foreground'
+      }`}
+    >
+      {children}
+      {isActive && (
+        <motion.div
+          layoutId="underline"
+          className="bg-primary absolute bottom-0 left-0 h-0.5 w-full"
+        />
+      )}
+    </button>
+  );
+}
+
+type TabsContentProps = {
+  value: string;
+  children: React.ReactNode;
+};
+
+function TabsContent({ value, children }: TabsContentProps) {
+  const { value: active } = useTabsCtx();
+  const isActive = active === value;
+
+  return (
+    <AnimatePresence mode="wait">
+      {isActive && (
+        <motion.div
+          key={value}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 8 }}
+          transition={{ duration: 0.2, ease: 'easeOut' }}
+          className="w-full"
+        >
+          {children}
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
+export const Tabs = {
+  Root: TabsRoot,
+  List: TabsList,
+  Trigger: TabsTrigger,
+  Content: TabsContent,
+};

@@ -7,13 +7,13 @@ import { cn } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
 
 const buttonVariants = cva(
-  'cursor-pointer inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none',
+  'inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none',
   {
     variants: {
       variant: {
         default: `
-          bg-blue-500 text-white hover:bg-blue-600
-          dark:bg-blue-400 dark:hover:bg-blue-500
+          bg-primary text-white hover:bg-blue-600
+          dark:hover:bg-blue-500
         `,
         secondary: `
           bg-slate-200 text-slate-900 hover:bg-slate-300
@@ -28,7 +28,7 @@ const buttonVariants = cva(
         default: 'h-10 px-4 py-2',
         sm: 'h-8 px-3 text-xs',
         lg: 'h-12 px-6 text-base',
-        icon: 'h-10 w-10',
+        icon: 'h-8 w-8',
       },
     },
     defaultVariants: {
@@ -43,6 +43,21 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   isLoading?: boolean;
+}
+
+// Icon-only / no extra padding variant for compact triggers
+export function ButtonNowrap({
+  className,
+  variant = 'outline',
+  size = 'icon',
+  ...props
+}: ButtonProps) {
+  return (
+    <button
+      className={cn(buttonVariants({ variant, size }), className)}
+      {...props}
+    />
+  );
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(

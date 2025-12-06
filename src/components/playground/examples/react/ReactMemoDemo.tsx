@@ -1,0 +1,41 @@
+'use client';
+
+import React, { useMemo, useState } from 'react';
+import { Typo } from '@/components/ui/Text';
+import { Button } from '@/components/ui/Button';
+
+const ExpensiveChild = React.memo(function ExpensiveChild({ value }: { value: number }) {
+  const computed = useMemo(() => {
+    // 가벼운 계산 흉내
+    let sum = 0;
+    for (let i = 0; i < 100000; i += 1) {
+      sum += (i * value) % 7;
+    }
+    return sum;
+  }, [value]);
+
+  return (
+    <Typo.caption className="text-slate-600 dark:text-slate-300">
+      memoized 결과: {computed}
+    </Typo.caption>
+  );
+});
+
+export default function ReactMemoDemo() {
+  const [value, setValue] = useState(1);
+  const [count, setCount] = useState(0);
+
+  return (
+    <div className="space-y-2">
+      <div className="flex gap-2">
+        <Button size="sm" onClick={() => setValue((v) => v + 1)}>
+          값 변경(+1)
+        </Button>
+        <Button size="sm" variant="outline" onClick={() => setCount((c) => c + 1)}>
+          불필요 렌더 버튼({count})
+        </Button>
+      </div>
+      <ExpensiveChild value={value} />
+    </div>
+  );
+}

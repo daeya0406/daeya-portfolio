@@ -1,8 +1,7 @@
 'use client';
 import colors from 'tailwindcss/colors';
-import { toast } from 'sonner';
 import ColorChip from '@/components/guide/ColorChip';
-import { Heading } from '@/components/common/Heading';
+import { Typo } from '@/components/ui/Text';
 
 export default function ColorSection() {
   const primary = { default: 'rgb(var(--primary))' };
@@ -25,7 +24,10 @@ export default function ColorSection() {
 
   return (
     <>
-      <Heading subtitle="색상 팔레트 / 클릭 시 클래스 복사">Color Palette</Heading>
+      <div className="line-bottom mb-8 space-y-2">
+        <Typo.h3 className="text-primary">Color Palette</Typo.h3>
+        <Typo.caption className="block">색상 팔레트 / 클릭 시 클래스 복사</Typo.caption>
+      </div>
 
       <div className="flex flex-col gap-10">
         {Object.entries(groups).map(([name, shades]) => (

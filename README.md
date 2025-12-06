@@ -26,7 +26,10 @@
 | **프레임워크**   | Next.js 15 (App Router)     |
 | **언어**         | TypeScript, React 19        |
 | **스타일링**     | TailwindCSS + Framer Motion |
+| **폼**           | React Hook Form + Zod       |
+| **데이터패칭**   | React Query                 |
 | **상태관리**     | Zustand                     |
+| **유틸**         | dayjs, clsx + tailwind-merge |
 | **데이터베이스** | Supabase                    |
 | **배포환경**     | Vercel                      |
 | **버전관리**     | Git + Husky + lint-staged   |
@@ -58,6 +61,25 @@
 - `@radix-ui/react-select` — Select 컴포넌트 로직
 - `@radix-ui/react-dialog` — Modal
 - `@radix-ui/react-dropdown-menu` — 옵션 메뉴
+- `@radix-ui/react-label` — Form 라벨 접근성
+- `React Hook Form + Zod` — 타입 안전/스키마 기반 폼
+- `React Query` — 데이터 패칭/뮤테이션 표준화
+
+---
+
+## 🔐 인증 (Supabase Auth)
+
+- 로그인 페이지: `/auth/login` (RHF + Zod + React Query)
+- 회원가입 페이지: `/auth/signup` (비밀번호 확인 포함)
+- 비밀번호 찾기: `/auth/forgot` → 메일 발송 후 `/auth/reset`으로 리디렉션 설정
+- 비밀번호 재설정: `/auth/reset` — 이메일 링크로 유입 시 해시 토큰을 사용해 세션 설정 후 비밀번호 변경
+- 환경 변수: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- 패턴 요약:
+  - `authSchema`로 email/password 스키마 정의 (`src/lib/validators/auth.ts`)
+  - `signUpSchema`/`forgotSchema`로 가입·리셋 폼 검증
+  - `useZodForm`으로 폼 상태/검증 통합, `useMutation`으로 `supabase.auth.signInWithPassword` 호출
+  - 성공 시 `redirect` 쿼리 파라미터 또는 홈으로 이동
+- 라우트 보호 예시(서버): `supabaseServer()`로 세션 체크 후 미인증 시 리다이렉트 처리 (추가 예정)
 
 ---
 
