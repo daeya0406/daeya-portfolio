@@ -136,7 +136,7 @@
   }
 
   .section-component {
-    @apply rounded-xl bg-white/60 p-4 shadow-lg md:p-6 dark:bg-slate-800/40;
+    @apply rounded-lg border border-slate-200/70 bg-white/80 p-3 text-sm shadow-sm dark:border-slate-800 dark:bg-slate-700/40;
   }
 
   .form-base {

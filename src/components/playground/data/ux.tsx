@@ -1,9 +1,9 @@
 import type { PlaygroundItem } from '@/types/playground';
-import UxMotionDemo from '../examples/ux/UxMotionDemo';
-import UxSkeletonDemo from '../examples/ux/UxSkeletonDemo';
-import UxOptimisticDemo from '../examples/ux/UxOptimisticDemo';
-import UxFocusDemo from '../examples/ux/UxFocusDemo';
-import UxToastDemo from '../examples/ux/UxToastDemo';
+import MotionDemo from '../examples/ux/MotionDemo';
+import SkeletonDemo from '../examples/ux/SkeletonDemo';
+import UxOptimisticDemo from '../examples/ux/OptimisticDemo';
+import FocusDemo from '../examples/ux/FocusDemo';
+import ToastDemo from '../examples/ux/ToastDemo';
 import { InfoBlock } from '../examples/InfoBlock';
 
 export const uxItems: PlaygroundItem[] = [
@@ -13,7 +13,7 @@ export const uxItems: PlaygroundItem[] = [
     tags: ['Framer', 'Fade/Slide'],
     description: '마이크로 인터랙션: Fade + Slide로 "보여줄게 있다"는 신호 주기',
     categories: ['ux'],
-    demo: <UxMotionDemo />,
+    demo: <MotionDemo />,
     code: `// Framer Motion
 <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 16 }} />`,
   },
@@ -23,7 +23,7 @@ export const uxItems: PlaygroundItem[] = [
     tags: ['Skeleton', 'Loading UX'],
     description: '레이아웃 점프를 줄이는 Skeleton vs Spinner 비교',
     categories: ['ux'],
-    demo: <UxSkeletonDemo />,
+    demo: <SkeletonDemo />,
     code: `<div className="animate-pulse h-4 w-3/4 rounded bg-slate-200" />`,
   },
   {
@@ -41,7 +41,7 @@ export const uxItems: PlaygroundItem[] = [
     tags: ['A11y', 'Focus'],
     description: 'focus-visible 스타일과 aria-label 예시',
     categories: ['ux'],
-    demo: <UxFocusDemo />,
+    demo: <FocusDemo />,
     code: `<button className="focus-visible:ring-2" aria-label="...">`,
   },
   {
@@ -50,7 +50,7 @@ export const uxItems: PlaygroundItem[] = [
     tags: ['Toast', 'Feedback'],
     description: '즉각적 피드백 + 자동 dismiss + role="alert"',
     categories: ['ux'],
-    demo: <UxToastDemo />,
+    demo: <ToastDemo />,
     code: `toast.success('저장됨', { duration: 1800, dismissible: true });
     
 onClick={() => toast.success('저장되었습니다', { duration: 1800, dismissible: true })}

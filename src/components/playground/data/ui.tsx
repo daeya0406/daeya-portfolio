@@ -13,7 +13,7 @@ export const uiItems: PlaygroundItem[] = [
 
 type Props = {};
 
-export default function ComponentName({}: Props) {
+export function ComponentName({}: Props) {
   return <div>ComponentName</div>;
 }
 
@@ -26,7 +26,7 @@ type Props = {
   active?: boolean;
 };
 
-export default function ComponentName({ label, count = 0, active = false }: Props) {
+export function ComponentName({ label, count = 0, active = false }: Props) {
   return (
     <div className={active ? "active" : ""}>
       {label} – {count}
@@ -53,7 +53,7 @@ type Props = {
   label: string;
 };
 
-export default function Button({ onClick, label }: Props) {
+export function Button({ onClick, label }: Props) {
   return (
     <button onClick={onClick} className="btn">
       {label}
@@ -64,7 +64,7 @@ export default function Button({ onClick, label }: Props) {
 
 // 4. Compound Pattern 껍데기
 
-const Component = ({ children }: { children: React.ReactNode }) => {
+export const Component = ({ children }: { children: React.ReactNode }) => {
   return <div className="component">{children}</div>;
 };
 
@@ -74,7 +74,7 @@ const Item = ({ children }: { children: React.ReactNode }) => {
 
 Component.Item = Item;
 
-export default Component;
+export { Component }; // default 없을 때 따로 내보내는 방식도 참고
 
 // 사용
 <Component>
@@ -92,7 +92,7 @@ type Props<T extends ElementType> = {
   children: React.ReactNode;
 } & ComponentProps<T>;
 
-export default function Text<T extends ElementType = "span">({
+export function Text<T extends ElementType = "span">({
   as,
   children,
   ...rest
@@ -110,7 +110,7 @@ import { useState } from "react";
 
 type Props = {};
 
-export default function ComponentName({}: Props) {
+export function ComponentName({}: Props) {
   const [value, setValue] = useState("");
 
   return (

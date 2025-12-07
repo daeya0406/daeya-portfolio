@@ -2,7 +2,7 @@
 
 import { Typo } from '@/components/ui/Text';
 
-export default function UxFocusDemo() {
+export default function FocusDemo() {
   return (
     <div className="space-y-3">
       <Typo.bodySm className="text-slate-600 dark:text-slate-200">

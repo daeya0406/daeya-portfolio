@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { Typo } from '@/components/ui/Text';
 
-export default function UxSkeletonDemo() {
+export default function SkeletonDemo() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

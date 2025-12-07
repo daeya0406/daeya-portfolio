@@ -15,7 +15,7 @@ export const navItems: NavItem[] = [
       { label: 'UI', href: '/guide?tab=ui' },
       { label: 'Font', href: '/guide?tab=font' },
       { label: 'Color', href: '/guide?tab=color' },
-      { label: 'Stack', href: '/guide?tab=stack', badge: 'New' },
+      { label: 'Stack', href: '/guide?tab=stack' },
     ],
   },
   {
@@ -29,15 +29,16 @@ export const navItems: NavItem[] = [
       { label: 'Next.js', href: '/playground?tab=nextjs' },
       { label: 'Plugin', href: '/playground?tab=plugin' },
       { label: 'Templates', href: '/playground?tab=templates' },
-      { label: 'UI', href: '/playground?tab=ui', badge: 'New' },
+      { label: 'UI', href: '/playground?tab=ui' },
       { label: 'UX', href: '/playground?tab=ux', badge: 'New' },
+      { label: 'Testing', href: '/playground?tab=testing', badge: 'New' },
     ],
   },
   {
     label: 'Work',
     children: [
       { label: 'Portfolio', href: '/work?tab=portfolio', badge: 'Soon' },
-      { label: 'Blog', href: '/work?tab=blog' },
+      { label: 'Blog', href: '/work?tab=blog', badge: 'Soon' },
       { label: 'Dashboard', href: '/work?tab=dashboard', badge: 'Private' },
       { label: 'Cards', href: '/work?tab=cards' },
     ],

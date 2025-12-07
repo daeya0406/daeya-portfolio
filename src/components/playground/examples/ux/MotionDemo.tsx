@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/Button';
 import { Typo } from '@/components/ui/Text';
 
-export default function UxMotionDemo() {
+export default function MotionDemo() {
   const [open, setOpen] = useState(true);
 
   return (

@@ -3,7 +3,7 @@
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/Button';
 
-export default function UxToastDemo() {
+export default function ToastDemo() {
   return (
     <div className="space-y-3">
       <div className="section-component flex flex-wrap gap-2">

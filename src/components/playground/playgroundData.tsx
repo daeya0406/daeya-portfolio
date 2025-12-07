@@ -7,6 +7,7 @@ import { reactItems } from './data/react';
 import { hookItems } from './data/hooks';
 import { jsItems } from './data/js';
 import { tsItems } from './data/ts';
+import { testingItems } from './data/testing';
 import { pluginItems } from './data/plugin';
 import { uxItems } from './data/ux';
 import { uiItems } from './data/ui';
@@ -18,6 +19,7 @@ export const playgroundItems: PlaygroundItem[] = [
   ...hookItems,
   ...jsItems,
   ...tsItems,
+  ...testingItems,
   ...pluginItems,
   ...uxItems,
   ...uiItems,
