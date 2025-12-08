@@ -22,7 +22,7 @@ export const jsItems: PlaygroundItem[] = [
     code: `const user = { id: 1, name: 'Daeya' };
 Object.keys(user);        // ['id','name']
 Object.entries(user);     // [['id',1],['name','Daeya']]
-Object.assign({}, user, { active: true });
+Object.assign(...user, { active: true });
 Object.fromEntries(Object.entries(user));`,
   },
   {
