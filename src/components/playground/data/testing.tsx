@@ -1,5 +1,6 @@
 import TestGroundDemo1 from '../examples/testing/TestGroundDemo1';
 import TestGroundDemo2 from '../examples/testing/TestGroundDemo2';
+import TestGroundDemo3 from '../examples/testing/TestGroundDemo3';
 import type { PlaygroundItem } from '@/types/playground';
 
 const CustomButton = () => {
@@ -10,58 +11,111 @@ export { CustomButton };
 
 export const testingItems: PlaygroundItem[] = [
   {
+    id: 'testing-3',
+    title: '객체 리스트 CRUD 버튼 렌더링',
+    tags: ['Testing', 'React'],
+    description: 'React',
+    categories: ['testing'],
+    demo: <TestGroundDemo3 />,
+    code: `const initialUsers = [
+  { id: 1, name: 'A', age: 20 },
+  { id: 2, name: 'B', age: 25 },
+  { id: 3, name: 'C', age: 30 },
+];
+
+const [users, setUsers] = useState(initialUsers);
+
+<section>
+  <p>
+    {users.map((u) => (
+      <span key={u.id}>{u.name}</span>
+    ))}
+  </p>
+  <div>
+    <Button onClick={() => setUsers((prev) => [...prev, { id: 4, name: 'D', age: 35 }])}>
+      추가
+    </Button>
+    <Button
+      onClick={() =>
+        setUsers((prev) =>
+          prev.map((user) => (user.id === 1 ? { id: 1, name: 'Z', age: 15 } : user))
+        )
+      }
+    >
+      수정 (A를 Z로)
+    </Button>
+    <Button onClick={() => setUsers((prev) => prev.filter((user) => user.name !== 'B'))}>
+      삭제 (B 제거)
+    </Button>
+    <Button onClick={() => setUsers((prev) => prev.filter((user) => user.age >= 25))}>
+      필터 (나이 25 이상)
+    </Button>
+  </div>
+</section>`,
+  },
+  {
+    id: 'testing-2',
+    title: '객체 리스트 CRUD',
+    tags: ['Testing', 'JS'],
+    description: 'JS',
+    categories: ['testing'],
+    demo: <TestGroundDemo2 />,
+    code: `const users = [
+  { id: 1, name: 'A', age: 20 },
+  { id: 2, name: 'B', age: 25 },
+  { id: 3, name: 'C', age: 30 },
+];
+
+// 1. 추가
+const added = [...users, {id: 4, name: 'D', age: 35}];
+
+// 2. 수정
+const updated = users.map((user) => user.id === 1 ? {...user, age: 15} : user);
+
+// 3. 삭제
+const removed = users.filter((user) => user.id !== 2 );
+
+// 4. 정렬
+const sorted = users.filter((user) => user.age >= 25);`,
+  },
+  {
     id: 'testing-1',
-    title: '테스트 1',
-    tags: ['Testing', 'Practice'],
+    title: '객체 리스트 메서드',
+    tags: ['Testing', 'JS'],
     description: '연습',
     categories: ['testing'],
     demo: <TestGroundDemo1 />,
-    code: `1.	map
-    이름만 뽑은 배열 만들기 → ["A", "B", "C"]
+    code: `const users = [
+  { id: 1, name: 'A', age: 20 },
+  { id: 2, name: 'B', age: 25 },
+  { id: 3, name: 'C', age: 30 },
+];
 
+1.	map
     {users.map((user) => user.name).join(', ')}
 
 2.	filter
-    25살 이상만 남기기
-
     {users
       .filter((user) => user.age >= 25)
       .map((user) => user.name)
       .join(', ')}
   
 3.	find
-    id가 2인 유저 찾기
-
     {users.find((user) => user.age >= 25)?.name}
 
 4.	추가
-    새 유저 하나 추가한 새 배열 만들기
-
     {[...users, { id: 4, name: 'D', age: 35 }].map((user) => user.name).join(', ')}
 
 5.	수정
-    id가 2인 유저의 나이만 26으로 바꾼 새 배열 만들기
-
     {users
       .map((user) => (user.id === 2 ? { ...user, name: 'Z', age: 40 } : user))
       .map((user) => user.name)
       .join(', ')}
   
 6.	삭제
-    id가 1인 유저 삭제한 새 배열 만들기
-    
-    {users
+      {users
       .filter((user) => user.id !== 1)
       .map((user) => user.name)
       .join(', ')}`,
-  },
-  {
-    id: 'testing-2',
-    title: '테스트 2',
-    tags: ['Testing', 'Practice'],
-    description: '연습',
-    categories: ['testing'],
-    demo: <TestGroundDemo2 />,
-    code: `코드 내용`,
   },
 ];
