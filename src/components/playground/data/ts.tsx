@@ -45,6 +45,71 @@ function area(shape: Shape) {
 }`,
   },
   {
+    id: 'keyof-mapping',
+    title: 'keyof',
+    tags: ['TS', 'keyof'],
+    description: '객체 키를 타입으로 추출(안전한 분기/레코드 구성)',
+    categories: ['ts'],
+    demo: (
+      <InfoBlock
+        title="keyof 포인트"
+        points={[
+          '객체 리터럴의 키를 union 타입으로 추출',
+          'Record<keyof typeof obj, ...>로 누락 없이 맵핑',
+          '함수 인자를 keyof 타입으로 제한해 오타 방지',
+        ]}
+      />
+    ),
+    code: `const scenarios = {
+  nullable: { name: 'Daeya' },
+  emptyString: { name: '' },
+  full: { name: 'Jeongdae' },
+};
+
+type Scene = keyof typeof scenarios; // 'nullable' | 'emptyString' | 'full'
+
+const labels: Record<Scene, string> = {
+  nullable: 'null/undefined',
+  emptyString: '빈 문자열',
+  full: '값 존재',
+};
+
+function getUser(scene: Scene) {
+  return scenarios[scene];
+}`,
+  },
+  {
+    id: 'typeof-inference',
+    title: 'typeof',
+    tags: ['TS', 'typeof'],
+    description: '값에서 타입 추출(런타임 값 모양을 타입으로 재사용)',
+    categories: ['ts'],
+    demo: (
+      <InfoBlock
+        title="typeof 포인트"
+        points={[
+          '초기 값(리터럴)에서 타입 선언 없이 추론',
+          'API 응답/설정 객체 타입을 typeof로 공유',
+          '헬퍼가 반환한 객체에 typeof 적용해 중복 선언 제거',
+        ]}
+      />
+    ),
+    code: `const config = {
+  endpoint: '/users',
+  retries: 3,
+  headers: { Accept: 'application/json' },
+};
+
+type Config = typeof config;
+
+function fetchUsers(cfg: Config) {
+  return fetch(cfg.endpoint, { headers: cfg.headers });
+}
+
+const response = { data: [{ id: 1, name: 'Daeya' }] };
+type Response = typeof response; // { data: { id: number; name: string }[] }`,
+  },
+  {
     id: 'utility-types',
     title: '유틸리티 타입 사용처',
     tags: ['TS', 'Utility'],

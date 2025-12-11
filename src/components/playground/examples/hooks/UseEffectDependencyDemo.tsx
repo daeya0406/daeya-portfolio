@@ -51,7 +51,7 @@ export default function UseEffectDependencyDemo() {
           </div>
         </div>
 
-        <div className="mt-3 grid gap-3 md:grid-cols-2">
+        <div className="mt-3 grid grid-cols-1 gap-3">
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <Button size="sm" onClick={() => setCount((c) => c + 1)}>

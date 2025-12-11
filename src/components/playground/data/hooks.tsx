@@ -1,85 +1,112 @@
 import ToggleHookDemo from '../examples/hooks/ToggleHookDemo';
 import UseEffectDependencyDemo from '../examples/hooks/UseEffectDependencyDemo';
+import UseStateDemo from '../examples/hooks/UseStateDemo';
 import UseQueryDemo from '../examples/hooks/UseQueryDemo';
-import UseStateEffectDemo from '../examples/hooks/UseStateEffectDemo';
+import UseMemoDemo from '../examples/hooks/UseMemotDemo';
+import UseRefDemo from '../examples/hooks/UseRefDemo';
 import type { PlaygroundItem } from '@/types/playground';
 
 export const hookItems: PlaygroundItem[] = [
   {
+    id: 'use-state-basic',
+    title: 'useState',
+    tags: ['Hooks', 'State'],
+    description: '컨트롤드 인풋 + 목록 추가, 무거운 초기값은 lazy initializer로 1회만',
+    categories: ['hooks'],
+    demo: <UseStateDemo />,
+    code: `const [text, setText] = useState('');
+const [names, setNames] = useState(['홍길동']);
+const [heavy, setHeavy] = useState(() => heavyInit()); // 최초 렌더 1회만 실행
+
+const add = () => {
+  if (!text.trim()) return;
+  setNames((prev) => [text, ...prev]);
+  setText('');
+};
+
+return (
+  <>
+    <input value={text} onChange={(e) => setText(e.target.value)} />
+    <button onClick={add}>추가</button>
+    <p>{names.join(', ')}</p>
+    <button onClick={() => setHeavy(heavyInit())}>무거운 연산 다시 실행</button>
+  </>
+);`,
+  },
+  {
     id: 'use-effect-deps',
     title: 'useEffect',
     tags: ['Hooks', 'Effect'],
-    description: 'deps 없음 / 특정 deps / [] 비교 + 타이머 cleanup',
+    description: '렌더마다 / 마운트 1회 / deps 변경 시 / 타이머 cleanup 흐름 비교',
     categories: ['hooks'],
     demo: <UseEffectDependencyDemo />,
-    code: `//요약 정리
-
-useEffect(() => {
-  //코드 내용
-});
-// 렌더(마운트 + 업데이트) 될 때마다 실행됨
-
-useEffect(() => {
-  //코드 내용
-}, []);
-// 처음 마운트 될 때 1 번만 실행됨 + 매번 실행되기 전에 이전 effect의 cleanup 실행
-
-useEffect(() => {
-  //코드 내용
-}, [name]);
-// 처음 마운트 될 때 1번 실행 + name 값이 바뀔 때마다 실행 + 매번 실행되기 전에 이전 effect의 cleanup 실행
-
-
-// 렌더링 내용
-
-const [count, setCount] = useState(0);
+    code: `const [count, setCount] = useState(0);
 const [text, setText] = useState('');
 
 useEffect(() => {
-  console.log('deps 없음: 렌더마다 실행');
+  console.log('렌더마다 실행 (마운트 + 업데이트)');
 });
 
 useEffect(() => {
-  console.log('count 변경 시만');
+  console.log('마운트 1회만 실행');
+  return () => console.log('언마운트 시 cleanup');
+}, []);
+
+useEffect(() => {
+  console.log('count가 바뀔 때만 실행', count);
 }, [count]);
 
 useEffect(() => {
-  console.log('text 변경 시만');
+  console.log('text가 바뀔 때만 실행', text);
 }, [text]);
 
-// [running]: 마운트 때 1회 설정 후, cleanup에서 clearInterval
 useEffect(() => {
   if (!running) return;
-  const timer = setInterval(() => {
-    setSeconds((s) => s + 1);
-  }, 1000);
-  return () => {
-    clearInterval(timer);
-  };
+  const timer = setInterval(() => setSeconds((s) => s + 1), 1000);
+  return () => clearInterval(timer); // deps가 바뀔 때마다 정리
 }, [running]);`,
   },
   {
-    id: 'use-state-effect',
-    title: 'useState + useEffect',
-    tags: ['Hooks', 'State'],
-    description: '기본 패턴',
+    id: 'use-memo',
+    title: 'useMemo',
+    tags: ['Hooks', 'Memoization'],
+    description: '값이 변할 때만 무거운 계산 재실행, 나머지 렌더는 캐시 사용',
     categories: ['hooks'],
-    demo: <UseStateEffectDemo />,
-    code: `const [count, setCount] = useState(0);
+    demo: <UseMemoDemo />,
+    code: `// 수정 전 : 상태가 바뀔 때마다 무거운 연산이 매번 실행됨
+const hardSum = ... ;
+    
+// 수정 후 : useMemo로 연산 결과를 캐싱해줄 것(useMemo(() => {}, [deps]) 로 감싸주면 됨)
+const hardSum = useMemo(() => {
+  ...
+}, [deps]);
 
-useEffect(() => {
-  const timer = setTimeout(() => setStatus('대기'), 500);
-  requestAnimationFrame(() => setStatus('변경 감지됨'));
-  return () => clearTimeout(timer);
-}, [count]);
+// 이렇게하면 렌더링마다 실행되지 않기 때문에 쉬운 계산기에 영향이 가지 않음.`,
+  },
+  {
+    id: 'use-ref',
+    title: 'useRef',
+    tags: ['Hooks', 'Ref'],
+    description: 'DOM 직접 참조 / 렌더링 없이 값 저장',
+    categories: ['hooks'],
+    demo: <UseRefDemo />,
+    code: `// DOM 직접 제어: ref 없으면 focus/값 삽입이 불편
+const inputRef = useRef<HTMLInputElement>(null);
+// const 돔요소Ref = useRef<HTML돔요소Element>(초기값); -> DOM 참조할땐 항상 이렇게 됨
+const focus = () => inputRef.current?.focus();
+const fill = () => { if (inputRef.current) inputRef.current.value = 'ref로 삽입'; };
 
-<Button onClick={() => setCount((c) => c + 1)} />`,
+// 렌더 없이 값 저장: ref는 변해도 렌더 X, 필요할 때만 state로 동기화
+const silentRef = useRef(0);
+const [visible, setVisible] = useState(0); // 렌더링 시켜서 값 확인용
+const add = () => { silentRef.current += 1; }; // 렌더 X
+const sync = () => setVisible(silentRef.current); // 이때만 렌더`,
   },
   {
     id: 'use-query',
     title: 'useQuery 패턴',
     tags: ['Hooks', 'Query'],
-    description: 'queryKey / select / staleTime 기본 예시',
+    description: 'queryKey + select + staleTime, pending/error 상태 분기까지 함께',
     categories: ['hooks'],
     demo: <UseQueryDemo />,
     code: `const { data, isPending, isFetching, error, refetch } = useQuery({

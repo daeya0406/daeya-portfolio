@@ -41,13 +41,23 @@ nums.every((n) => n > 0);        // true`,
   },
   {
     id: 'nullish-pattern',
-    title: 'nullish / or / 삼항 연산자',
-    tags: ['??', '||', '? :'],
-    description: 'nullish / or / 삼항 연산자로 안전한 fallback',
+    title: '조건 처리',
+    tags: ['??', '||', '&&', '? :'],
+    description: 'null/undefined vs 빈 문자열 vs 값 존재를 버튼으로 전환하며 fallback 확인',
     categories: ['js'],
     demo: <NullishPatternDemo />,
-    code: `const role = user.role ?? 'guest'; // null/undefined면 'guest'
-const city = user.city || 'Unknown'; // falsy면 'Unknown'
+    code: `const scenarios = {
+  nullable: { name: 'Daeya', role: null, city: undefined, coupon: 'SPRING' },
+  emptyString: { name: '', role: '', city: '', coupon: '' },
+  full: { name: 'Jeongdae', role: 'admin', city: 'Seoul', coupon: 'VIP' },
+};
+
+const [scene, setScene] = useState<keyof typeof scenarios>('nullable');
+const user = scenarios[scene];
+
+const role = user.role ?? 'guest';              // null/undefined → guest
+const city = user.city || 'Unknown';            // falsy → Unknown
+const coupon = user.coupon && \`\${user.coupon} 사용\`; // truthy일 때만 실행
 const greeting = user.name ? \`Hello, \${user.name}!\` : 'None!';`,
   },
   {
