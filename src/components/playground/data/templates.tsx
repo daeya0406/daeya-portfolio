@@ -44,6 +44,98 @@ if (state === 'empty') return <Empty />;
 return <List data={data} />;`,
   },
   {
+    id: 'fetch-template',
+    title: 'fetch',
+    tags: ['Template', 'Fetch'],
+    description: 'fetch + 상태 분기 기본 예제',
+    categories: ['templates'],
+    demo: (
+      <InfoBlock
+        title="fetch 패턴"
+        points={['loading/error 분기', '언마운트 후 setState 방지 플래그']}
+      />
+    ),
+    code: `import { useEffect, useState } from "react";
+
+export default function Demo() {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    let ignore = false;
+
+    const run = async () => {
+      setLoading(true);
+      setError(null);
+
+      try {
+        const res = await fetch("https://jsonplaceholder.typicode.com/users");
+        if (!res.ok) throw new Error(\`HTTP \${res.status}\`);
+
+        const json = await res.json();
+        if (!ignore) setData(json);
+      } catch (e) {
+        if (!ignore) setError(e);
+      } finally {
+        if (!ignore) setLoading(false);
+      }
+    };
+
+    run();
+    return () => {
+      ignore = true; // 언마운트 후 setState 방지
+    };
+  }, []);
+
+  if (loading) return <p>로딩중...</p>;
+  if (error) return <p>에러: {String(error.message ?? error)}</p>;
+
+  return (
+    <ul>
+      {(data ?? []).map((u) => (
+        <li key={u.id}>{u.name}</li>
+      ))}
+    </ul>
+  );
+}`,
+  },
+  {
+    id: 'axios-template',
+    title: 'axios',
+    tags: ['Template', 'Axios'],
+    description: 'axios로 리스트 fetch 예제',
+    categories: ['templates'],
+    demo: (
+      <InfoBlock
+        title="axios 패턴"
+        points={['axios.get + useEffect', '간단한 목록 렌더링']}
+      />
+    ),
+    code: `import axios from "axios";
+import { useEffect, useState } from "react";
+
+export default function Demo() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const run = async () => {
+      const res = await axios.get("https://jsonplaceholder.typicode.com/users");
+      setData(res.data);
+    };
+    run();
+  }, []);
+
+  return (
+    <ul>
+      {data.map((u) => (
+        <li key={u.id}>{u.name}</li>
+      ))}
+    </ul>
+  );
+}`,
+  },
+  {
     id: 'table-filter',
     title: 'Table 필터•정렬',
     tags: ['Table', 'Filter', 'UI'],
